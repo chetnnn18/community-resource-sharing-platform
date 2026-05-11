@@ -21,7 +21,7 @@ public class SecurityConfig {
         http
                 .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/register", "/login", "/css/**", "/images/**", "/uploads/**", "/webjars/**").permitAll()
+                        .requestMatchers("/", "/register", "/login", "/favicon.svg", "/favicon.ico", "/css/**", "/images/**", "/uploads/**", "/webjars/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/items", "/items/view/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

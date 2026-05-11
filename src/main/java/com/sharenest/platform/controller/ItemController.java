@@ -76,16 +76,15 @@ public class ItemController {
         }
 
         User currentUser = currentUserService.getCurrentUser();
-        Item item;
         try {
-            item = itemService.create(itemForm, currentUser);
+            itemService.create(itemForm, currentUser);
         } catch (IllegalArgumentException exception) {
             bindingResult.rejectValue("imageFile", "invalid", exception.getMessage());
             addItemFormOptions(model);
             return "items/form";
         }
         redirectAttributes.addFlashAttribute("success", "Item listed successfully.");
-        return "redirect:/items/view/" + item.getId();
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/items/{id}/edit")
