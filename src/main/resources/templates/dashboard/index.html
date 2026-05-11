@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Dashboard')}"></head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/alerts :: alerts}"></div>
+
+<main class="container py-4">
+    <div class="dashboard-heading">
+        <div>
+            <p class="section-kicker mb-1">Member dashboard</p>
+            <h1 class="h2 fw-bold mb-0">Hello, <span th:text="${user.fullName}">Member</span></h1>
+        </div>
+        <a class="btn btn-primary" th:href="@{/items/new}"><i class="bi bi-plus-lg"></i> Share Item</a>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4"><div class="stat-tile"><span th:text="${itemCount}">0</span><small>My items</small></div></div>
+        <div class="col-md-4"><div class="stat-tile"><span th:text="${incomingCount}">0</span><small>Incoming requests</small></div></div>
+        <div class="col-md-4"><div class="stat-tile"><span th:text="${borrowCount}">0</span><small>My borrow requests</small></div></div>
+    </div>
+
+    <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#items" type="button">My Items</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#incoming" type="button">Incoming</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#borrowed" type="button">Borrowing</button></li>
+    </ul>
+
+    <div class="tab-content dashboard-tabs">
+        <section class="tab-pane fade show active" id="items">
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead><tr><th>Item</th><th>Category</th><th>Status</th><th></th></tr></thead>
+                    <tbody>
+                    <tr th:each="item : ${myItems}">
+                        <td th:text="${item.title}">Item</td>
+                        <td th:text="${item.category.name}">Category</td>
+                        <td><span class="badge" th:classappend="${item.status.name() == 'AVAILABLE'} ? ' text-bg-success' : (${item.status.name() == 'BORROWED'} ? ' text-bg-warning' : ' text-bg-info')" th:text="${item.status}">Status</span></td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-secondary" th:href="@{/items/view/{id}(id=${item.id})}">View</a>
+                            <a class="btn btn-sm btn-outline-primary" th:href="@{/items/{id}/edit(id=${item.id})}">Edit</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(myItems)}"><td colspan="4" class="text-muted">No shared items yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="tab-pane fade" id="incoming">
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead><tr><th>Item</th><th>Borrower</th><th>Dates</th><th>Status</th><th></th></tr></thead>
+                    <tbody>
+                    <tr th:each="request : ${incomingRequests}">
+                        <td th:text="${request.item.title}">Item</td>
+                        <td th:text="${request.borrower.fullName}">Borrower</td>
+                        <td><span th:text="${request.startDate}"></span> to <span th:text="${request.endDate}"></span></td>
+                        <td><span class="badge text-bg-light" th:text="${request.status}">Status</span></td>
+                        <td class="text-end request-actions">
+                            <form th:if="${request.status.name() == 'PENDING'}" th:action="@{/requests/{id}/approve(id=${request.id})}" method="post">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                <button class="btn btn-sm btn-success" type="submit">Approve</button>
+                            </form>
+                            <form th:if="${request.status.name() == 'PENDING'}" th:action="@{/requests/{id}/reject(id=${request.id})}" method="post">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                <button class="btn btn-sm btn-outline-danger" type="submit">Reject</button>
+                            </form>
+                            <form th:if="${request.status.name() == 'APPROVED'}" th:action="@{/requests/{id}/return(id=${request.id})}" method="post">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                <button class="btn btn-sm btn-outline-primary" type="submit">Returned</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(incomingRequests)}"><td colspan="5" class="text-muted">No incoming requests yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="tab-pane fade" id="borrowed">
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead><tr><th>Item</th><th>Owner</th><th>Dates</th><th>Status</th><th></th></tr></thead>
+                    <tbody>
+                    <tr th:each="request : ${myRequests}">
+                        <td th:text="${request.item.title}">Item</td>
+                        <td th:text="${request.item.owner.fullName}">Owner</td>
+                        <td><span th:text="${request.startDate}"></span> to <span th:text="${request.endDate}"></span></td>
+                        <td><span class="badge text-bg-light" th:text="${request.status}">Status</span></td>
+                        <td class="text-end">
+                            <form th:if="${request.status.name() == 'PENDING'}" th:action="@{/requests/{id}/cancel(id=${request.id})}" method="post">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                <button class="btn btn-sm btn-outline-danger" type="submit">Cancel</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(myRequests)}"><td colspan="5" class="text-muted">No borrow requests yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

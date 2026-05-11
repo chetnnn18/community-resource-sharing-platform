@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Manage Items')}"></head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main class="container py-4">
+    <div class="dashboard-heading">
+        <h1 class="h2 fw-bold">Items</h1>
+        <a class="btn btn-outline-secondary" th:href="@{/admin}">Back to admin</a>
+    </div>
+    <div class="card table-card">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead><tr><th>Title</th><th>Owner</th><th>Category</th><th>Status</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="item : ${items}">
+                    <td th:text="${item.title}">Title</td>
+                    <td th:text="${item.owner.fullName}">Owner</td>
+                    <td th:text="${item.category.name}">Category</td>
+                    <td><span class="badge" th:classappend="${item.status.name() == 'AVAILABLE'} ? ' text-bg-success' : (${item.status.name() == 'BORROWED'} ? ' text-bg-warning' : ' text-bg-info')" th:text="${item.status}">Status</span></td>
+                    <td class="text-end"><a class="btn btn-sm btn-outline-primary" th:href="@{/items/view/{id}(id=${item.id})}">Open</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,216 @@
+:root {
+    --sn-primary: #246bfe;
+    --sn-primary-dark: #174ec0;
+    --sn-ink: #172033;
+    --sn-muted: #667085;
+    --sn-border: #e6eaf2;
+    --sn-surface: #ffffff;
+    --sn-soft: #f6f8fb;
+    --sn-accent: #12a594;
+    --sn-warm: #ffb45c;
+}
+
+body {
+    background: var(--sn-soft);
+    color: var(--sn-ink);
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+.brand-mark {
+    color: var(--sn-primary);
+}
+
+.btn,
+.card,
+.form-control,
+.form-select,
+.alert {
+    border-radius: 8px;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--sn-primary);
+    --bs-btn-border-color: var(--sn-primary);
+    --bs-btn-hover-bg: var(--sn-primary-dark);
+    --bs-btn-hover-border-color: var(--sn-primary-dark);
+}
+
+.hero-band {
+    background: linear-gradient(180deg, #ffffff 0%, #eef5ff 100%);
+    border-bottom: 1px solid var(--sn-border);
+}
+
+.hero-photo {
+    min-height: 330px;
+    border-radius: 8px;
+    background:
+            linear-gradient(0deg, rgba(23, 32, 51, .2), rgba(23, 32, 51, .2)),
+            url("https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1100&q=80") center/cover;
+    box-shadow: 0 18px 45px rgba(36, 107, 254, .16);
+}
+
+.section-kicker {
+    color: var(--sn-accent);
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.stat-tile {
+    background: var(--sn-surface);
+    border: 1px solid var(--sn-border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    min-height: 112px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stat-tile span {
+    color: var(--sn-primary);
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.stat-tile small {
+    color: var(--sn-muted);
+    margin-top: .5rem;
+}
+
+.item-card,
+.auth-card,
+.form-card,
+.table-card {
+    border: 1px solid var(--sn-border);
+    box-shadow: 0 14px 30px rgba(16, 24, 40, .06);
+}
+
+.item-card {
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.item-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 45px rgba(16, 24, 40, .12);
+}
+
+.item-card .card-img-top,
+.item-placeholder {
+    height: 215px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+}
+
+.item-placeholder {
+    background:
+            linear-gradient(135deg, rgba(36, 107, 254, .18), rgba(18, 165, 148, .2)),
+            repeating-linear-gradient(45deg, #f8fafc, #f8fafc 10px, #eef2f7 10px, #eef2f7 20px);
+}
+
+.line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.auth-bg {
+    background:
+            radial-gradient(circle at top left, rgba(36, 107, 254, .13), transparent 32rem),
+            linear-gradient(180deg, #ffffff 0%, #f6f8fb 100%);
+}
+
+.search-panel,
+.detail-panel,
+.borrow-box,
+.dashboard-tabs {
+    background: var(--sn-surface);
+    border: 1px solid var(--sn-border);
+    border-radius: 8px;
+    padding: 1.25rem;
+}
+
+.detail-image {
+    width: 100%;
+    min-height: 420px;
+    max-height: 620px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--sn-border);
+    background: #edf2f7;
+}
+
+.form-image-preview {
+    width: 180px;
+    height: 120px;
+    object-fit: cover;
+    border: 1px solid var(--sn-border);
+    border-radius: 8px;
+}
+
+.resource-meta {
+    display: grid;
+    gap: .75rem;
+    color: var(--sn-muted);
+}
+
+.resource-meta i {
+    color: var(--sn-primary);
+    margin-right: .4rem;
+}
+
+.dashboard-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-tabs {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.request-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .5rem;
+}
+
+.empty-state {
+    background: var(--sn-surface);
+    border: 1px dashed #c9d3e5;
+    border-radius: 8px;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.empty-state i {
+    color: var(--sn-warm);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 767.98px) {
+    .dashboard-heading {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .hero-photo,
+    .detail-image {
+        min-height: 260px;
+    }
+
+    .request-actions {
+        justify-content: flex-start;
+    }
+}

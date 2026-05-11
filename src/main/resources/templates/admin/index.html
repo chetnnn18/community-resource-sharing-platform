@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Admin Dashboard')}"></head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/alerts :: alerts}"></div>
+
+<main class="container py-4">
+    <div class="dashboard-heading">
+        <div>
+            <p class="section-kicker mb-1">Admin panel</p>
+            <h1 class="h2 fw-bold mb-0">ShareNest overview</h1>
+        </div>
+        <div class="btn-group">
+            <a class="btn btn-outline-secondary" th:href="@{/admin/users}">Users</a>
+            <a class="btn btn-outline-secondary" th:href="@{/admin/categories}">Categories</a>
+            <a class="btn btn-outline-secondary" th:href="@{/admin/requests}">Requests</a>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3"><div class="stat-tile"><span th:text="${userCount}">0</span><small>Total users</small></div></div>
+        <div class="col-md-3"><div class="stat-tile"><span th:text="${itemCount}">0</span><small>Total items</small></div></div>
+        <div class="col-md-3"><div class="stat-tile"><span th:text="${availableItemCount}">0</span><small>Available items</small></div></div>
+        <div class="col-md-3"><div class="stat-tile"><span th:text="${pendingRequestCount}">0</span><small>Pending requests</small></div></div>
+    </div>
+
+    <div class="card table-card">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Recent members</h2>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead>
+                    <tbody>
+                    <tr th:each="user : ${recentUsers}">
+                        <td th:text="${user.fullName}">Name</td>
+                        <td th:text="${user.email}">Email</td>
+                        <td><span class="badge text-bg-light" th:text="${user.role}">Role</span></td>
+                        <td th:text="${#temporals.format(user.createdAt, 'dd MMM yyyy')}">Date</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

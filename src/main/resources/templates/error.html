@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Error')}"></head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main class="container py-5">
+    <div class="empty-state">
+        <i class="bi bi-exclamation-triangle"></i>
+        <h1 class="h3" th:text="${status} ?: 'Something went wrong'">Error</h1>
+        <p class="text-muted" th:text="${message} ?: 'Please try again.'">Message</p>
+        <a class="btn btn-primary" th:href="@{/}">Go home</a>
+    </div>
+</main>
+</body>
+</html>

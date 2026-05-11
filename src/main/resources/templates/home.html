@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: head('Home')}"></head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/alerts :: alerts}"></div>
+
+<header class="hero-band">
+    <div class="container py-5">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <p class="section-kicker">Community resource sharing</p>
+                <h1 class="display-5 fw-bold">ShareNest</h1>
+                <p class="lead text-muted mb-4">Borrow useful household items from nearby members and share what you already own with people you trust.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="btn btn-primary btn-lg" th:href="@{/items}"><i class="bi bi-search"></i> Browse Items</a>
+                    <a class="btn btn-outline-primary btn-lg" sec:authorize="isAnonymous()" th:href="@{/register}">Create Account</a>
+                    <a class="btn btn-outline-primary btn-lg" sec:authorize="isAuthenticated()" th:href="@{/items/new}">Share an Item</a>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="hero-photo" role="img" aria-label="Neighbors sharing household resources"></div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container py-5">
+    <div class="row g-3 mb-5">
+        <div class="col-md-4">
+            <div class="stat-tile">
+                <span th:text="${totalItems}">0</span>
+                <small>Total shared items</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-tile">
+                <span th:text="${availableItems}">0</span>
+                <small>Available right now</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-tile">
+                <span th:text="${#lists.size(categories)}">0</span>
+                <small>Helpful categories</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <p class="section-kicker mb-1">Recently added</p>
+            <h2 class="h3 mb-0">Available items</h2>
+        </div>
+        <a class="btn btn-outline-secondary" th:href="@{/items}">View all</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-4" th:each="item : ${latestItems}">
+            <div class="card item-card h-100">
+                <img th:if="${!#strings.isEmpty(item.imageUrl)}" th:src="${item.imageUrl}" class="card-img-top" th:alt="${item.title}">
+                <div th:if="${#strings.isEmpty(item.imageUrl)}" class="item-placeholder"></div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="badge text-bg-light" th:text="${item.category.name}">Category</span>
+                        <span class="badge" th:classappend="${item.status.name() == 'AVAILABLE'} ? ' text-bg-success' : (${item.status.name() == 'BORROWED'} ? ' text-bg-warning' : ' text-bg-info')" th:text="${item.status}">AVAILABLE</span>
+                    </div>
+                    <h3 class="h5 card-title" th:text="${item.title}">Item</h3>
+                    <p class="card-text text-muted line-clamp" th:text="${item.description}">Description</p>
+                    <a class="stretched-link" th:href="@{/items/view/{id}(id=${item.id})}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
