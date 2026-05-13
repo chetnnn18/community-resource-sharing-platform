@@ -6,6 +6,7 @@ import com.sharenest.platform.service.CategoryService;
 import com.sharenest.platform.service.ItemService;
 import com.sharenest.platform.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -39,6 +41,7 @@ public class AdminController {
         model.addAttribute("regularUserCount", userService.countRegularUsers());
         model.addAttribute("itemCount", itemService.countAll());
         model.addAttribute("availableItemCount", itemService.countAvailable());
+        model.addAttribute("pendingResourceCount", itemService.countPendingApproval());
         model.addAttribute("requestCount", borrowRequestService.countAll());
         model.addAttribute("pendingRequestCount", borrowRequestService.countPending());
         model.addAttribute("recentUsers", userService.recentUsers());
@@ -62,6 +65,38 @@ public class AdminController {
     public String items(Model model) {
         model.addAttribute("items", itemService.search(null, null));
         return "admin/items";
+    }
+
+    @GetMapping("/admin/resources/pending")
+    public String pendingResources(Model model) {
+        model.addAttribute("items", itemService.findPendingApproval());
+        return "admin/pending-resources";
+    }
+
+    @PutMapping("/admin/resources/{id}/approve")
+    public ResponseEntity<Void> approveResource(@PathVariable Long id) {
+        itemService.approveResource(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/admin/resources/{id}/reject")
+    public ResponseEntity<Void> rejectResource(@PathVariable Long id) {
+        itemService.rejectResource(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/admin/resources/{id}/approve")
+    public String approveResourceFallback(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        itemService.approveResource(id);
+        redirectAttributes.addFlashAttribute("success", "Resource approved.");
+        return "redirect:/admin/resources/pending";
+    }
+
+    @PostMapping("/admin/resources/{id}/reject")
+    public String rejectResourceFallback(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        itemService.rejectResource(id);
+        redirectAttributes.addFlashAttribute("success", "Resource rejected.");
+        return "redirect:/admin/resources/pending";
     }
 
     @GetMapping("/admin/requests")

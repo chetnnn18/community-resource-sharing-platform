@@ -43,6 +43,7 @@
                     </div>
                     <h2 class="h5" th:text="${item.title}">Item name</h2>
                     <p class="text-muted line-clamp" th:text="${item.description}">Description</p>
+                    <div class="fw-semibold mb-2" th:text="${item.price.signum() == 0 ? 'Free' : 'Rs. ' + #numbers.formatDecimal(item.price, 1, 2)}">Free</div>
                     <div class="small text-muted"><i class="bi bi-geo-alt"></i> <span th:text="${item.location}">Location</span></div>
                 </div>
                 <div class="card-footer bg-white border-0 pt-0">

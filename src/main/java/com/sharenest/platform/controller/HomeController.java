@@ -21,7 +21,7 @@ public class HomeController {
     public String home(Model model) {
         model.addAttribute("latestItems", itemService.latestAvailable());
         model.addAttribute("categories", categoryService.findAll());
-        model.addAttribute("totalItems", itemService.countAll());
+        model.addAttribute("totalItems", itemService.countApproved());
         model.addAttribute("availableItems", itemService.countAvailable());
         return "home";
     }

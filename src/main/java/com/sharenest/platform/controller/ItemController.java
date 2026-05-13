@@ -42,7 +42,7 @@ public class ItemController {
     public String browse(@RequestParam(required = false) String keyword,
                          @RequestParam(required = false) Long categoryId,
                          Model model) {
-        model.addAttribute("items", itemService.search(keyword, categoryId));
+        model.addAttribute("items", itemService.searchApproved(keyword, categoryId));
         model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("keyword", keyword);
         model.addAttribute("categoryId", categoryId);
@@ -51,10 +51,11 @@ public class ItemController {
 
     @GetMapping("/items/view/{id}")
     public String details(@PathVariable Long id, Model model) {
-        Item item = itemService.findById(id);
+        User currentUser = currentUserService.getCurrentUser();
+        Item item = itemService.findVisibleToUser(id, currentUser);
         model.addAttribute("item", item);
         model.addAttribute("borrowRequest", new BorrowRequest());
-        model.addAttribute("currentUser", currentUserService.getCurrentUser());
+        model.addAttribute("currentUser", currentUser);
         return "items/details";
     }
 
@@ -83,13 +84,13 @@ public class ItemController {
             addItemFormOptions(model);
             return "items/form";
         }
-        redirectAttributes.addFlashAttribute("success", "Item listed successfully.");
+        redirectAttributes.addFlashAttribute("success", "Item submitted for admin approval.");
         return "redirect:/dashboard";
     }
 
     @GetMapping("/items/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
-        Item item = itemService.findById(id);
+        Item item = itemService.findManageableById(id, currentUserService.getCurrentUser());
         model.addAttribute("itemId", id);
         model.addAttribute("itemForm", itemService.toForm(item));
         addItemFormOptions(model);
@@ -116,7 +117,7 @@ public class ItemController {
             addItemFormOptions(model);
             return "items/form";
         }
-        redirectAttributes.addFlashAttribute("success", "Item updated successfully.");
+        redirectAttributes.addFlashAttribute("success", "Item updated and sent for admin approval.");
         return "redirect:/items/view/" + id;
     }
 
@@ -134,9 +135,10 @@ public class ItemController {
                                 RedirectAttributes redirectAttributes,
                                 Model model) {
         if (bindingResult.hasErrors()) {
-            Item item = itemService.findById(id);
+            User currentUser = currentUserService.getCurrentUser();
+            Item item = itemService.findVisibleToUser(id, currentUser);
             model.addAttribute("item", item);
-            model.addAttribute("currentUser", currentUserService.getCurrentUser());
+            model.addAttribute("currentUser", currentUser);
             return "items/details";
         }
 

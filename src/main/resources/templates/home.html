@@ -69,6 +69,7 @@
                     </div>
                     <h3 class="h5 card-title" th:text="${item.title}">Item</h3>
                     <p class="card-text text-muted line-clamp" th:text="${item.description}">Description</p>
+                    <div class="fw-semibold" th:text="${item.price.signum() == 0 ? 'Free' : 'Rs. ' + #numbers.formatDecimal(item.price, 1, 2)}">Free</div>
                     <a class="stretched-link" th:href="@{/items/view/{id}(id=${item.id})}"></a>
                 </div>
             </div>

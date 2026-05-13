@@ -30,18 +30,23 @@
         <section class="tab-pane fade show active" id="items">
             <div class="table-responsive">
                 <table class="table align-middle">
-                    <thead><tr><th>Item</th><th>Category</th><th>Status</th><th></th></tr></thead>
+                    <thead><tr><th>Item</th><th>Category</th><th>Approval</th><th>Status</th><th></th></tr></thead>
                     <tbody>
                     <tr th:each="item : ${myItems}">
                         <td th:text="${item.title}">Item</td>
                         <td th:text="${item.category.name}">Category</td>
+                        <td>
+                            <span class="approval-badge"
+                                  th:classappend="${item.approvalStatus.name() == 'APPROVED'} ? ' approval-approved' : (${item.approvalStatus.name() == 'REJECTED'} ? ' approval-rejected' : ' approval-pending')"
+                                  th:text="${item.approvalStatus.name() == 'PENDING'} ? 'Pending' : (${item.approvalStatus.name() == 'APPROVED'} ? 'Approved' : 'Rejected')">Pending</span>
+                        </td>
                         <td><span class="badge" th:classappend="${item.status.name() == 'AVAILABLE'} ? ' text-bg-success' : (${item.status.name() == 'BORROWED'} ? ' text-bg-warning' : ' text-bg-info')" th:text="${item.status}">Status</span></td>
                         <td class="text-end">
                             <a class="btn btn-sm btn-outline-secondary" th:href="@{/items/view/{id}(id=${item.id})}">View</a>
                             <a class="btn btn-sm btn-outline-primary" th:href="@{/items/{id}/edit(id=${item.id})}">Edit</a>
                         </td>
                     </tr>
-                    <tr th:if="${#lists.isEmpty(myItems)}"><td colspan="4" class="text-muted">No shared items yet.</td></tr>
+                    <tr th:if="${#lists.isEmpty(myItems)}"><td colspan="5" class="text-muted">No shared items yet.</td></tr>
                     </tbody>
                 </table>
             </div>

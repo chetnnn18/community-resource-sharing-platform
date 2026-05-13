@@ -3,6 +3,7 @@ package com.sharenest.platform.config;
 import com.sharenest.platform.entity.Category;
 import com.sharenest.platform.entity.Item;
 import com.sharenest.platform.entity.ItemStatus;
+import com.sharenest.platform.entity.ResourceApprovalStatus;
 import com.sharenest.platform.entity.Role;
 import com.sharenest.platform.entity.User;
 import com.sharenest.platform.repository.CategoryRepository;
@@ -13,6 +14,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -83,7 +85,9 @@ public class DataInitializer implements CommandLineRunner {
         item.setCategory(category);
         item.setOwner(owner);
         item.setImageUrl(imageUrl);
+        item.setPrice(BigDecimal.ZERO);
         item.setStatus(ItemStatus.AVAILABLE);
+        item.setApprovalStatus(ResourceApprovalStatus.APPROVED);
         return item;
     }
 

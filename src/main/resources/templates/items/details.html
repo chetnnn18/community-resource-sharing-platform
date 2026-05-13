@@ -22,9 +22,15 @@
                     </div>
                     <span class="badge fs-6" th:classappend="${item.status.name() == 'AVAILABLE'} ? ' text-bg-success' : (${item.status.name() == 'BORROWED'} ? ' text-bg-warning' : ' text-bg-info')" th:text="${item.status}">AVAILABLE</span>
                 </div>
+                <div class="mt-2" th:if="${currentUser != null and (currentUser.id == item.owner.id or currentUser.role.name() == 'ADMIN')}">
+                    <span class="approval-badge"
+                          th:classappend="${item.approvalStatus.name() == 'APPROVED'} ? ' approval-approved' : (${item.approvalStatus.name() == 'REJECTED'} ? ' approval-rejected' : ' approval-pending')"
+                          th:text="${item.approvalStatus.name() == 'PENDING'} ? 'Pending approval' : (${item.approvalStatus.name() == 'APPROVED'} ? 'Approved' : 'Rejected')">Pending approval</span>
+                </div>
                 <p class="text-muted mt-3" th:text="${item.description}">Description</p>
                 <div class="resource-meta">
                     <div><i class="bi bi-person-circle"></i> <span th:text="${item.owner.fullName}">Owner</span></div>
+                    <div><i class="bi bi-cash-coin"></i> <span th:text="${item.price.signum() == 0 ? 'Free' : 'Rs. ' + #numbers.formatDecimal(item.price, 1, 2)}">Free</span></div>
                     <div><i class="bi bi-geo-alt"></i> <span th:text="${item.location}">Location</span></div>
                     <div><i class="bi bi-clock"></i> Added <span th:text="${#temporals.format(item.createdAt, 'dd MMM yyyy')}"></span></div>
                 </div>
@@ -42,7 +48,7 @@
                 </div>
 
                 <form sec:authorize="isAuthenticated()"
-                      th:if="${currentUser != null and currentUser.id != item.owner.id and item.status.name() == 'AVAILABLE'}"
+                      th:if="${currentUser != null and currentUser.id != item.owner.id and item.status.name() == 'AVAILABLE' and item.approvalStatus.name() == 'APPROVED'}"
                       th:action="@{/items/{id}/borrow(id=${item.id})}"
                       th:object="${borrowRequest}"
                       method="post"

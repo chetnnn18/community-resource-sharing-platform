@@ -185,6 +185,44 @@ a {
     gap: .5rem;
 }
 
+.approval-badge {
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    font-size: .78rem;
+    font-weight: 800;
+    line-height: 1;
+    padding: .42rem .72rem;
+}
+
+.approval-approved {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.approval-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.approval-rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.pending-resource-thumb {
+    width: 82px;
+    height: 62px;
+    border: 1px solid var(--sn-border);
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.pending-resource-table td,
+.pending-resource-table th {
+    white-space: nowrap;
+}
+
 .empty-state {
     background: var(--sn-surface);
     border: 1px dashed #c9d3e5;

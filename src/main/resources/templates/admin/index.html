@@ -12,6 +12,7 @@
             <h1 class="h2 fw-bold mb-0">ShareNest overview</h1>
         </div>
         <div class="btn-group">
+            <a class="btn btn-outline-secondary" th:href="@{/admin/resources/pending}">Pending Resources</a>
             <a class="btn btn-outline-secondary" th:href="@{/admin/users}">Users</a>
             <a class="btn btn-outline-secondary" th:href="@{/admin/categories}">Categories</a>
             <a class="btn btn-outline-secondary" th:href="@{/admin/requests}">Requests</a>
@@ -22,7 +23,7 @@
         <div class="col-md-3"><div class="stat-tile"><span th:text="${userCount}">0</span><small>Total users</small></div></div>
         <div class="col-md-3"><div class="stat-tile"><span th:text="${itemCount}">0</span><small>Total items</small></div></div>
         <div class="col-md-3"><div class="stat-tile"><span th:text="${availableItemCount}">0</span><small>Available items</small></div></div>
-        <div class="col-md-3"><div class="stat-tile"><span th:text="${pendingRequestCount}">0</span><small>Pending requests</small></div></div>
+        <div class="col-md-3"><div class="stat-tile"><span th:text="${pendingResourceCount}">0</span><small>Pending resources</small></div></div>
     </div>
 
     <div class="card table-card">

@@ -11,12 +11,17 @@
     <div class="card table-card">
         <div class="table-responsive">
             <table class="table align-middle mb-0">
-                <thead><tr><th>Title</th><th>Owner</th><th>Category</th><th>Status</th><th></th></tr></thead>
+                <thead><tr><th>Title</th><th>Owner</th><th>Category</th><th>Approval</th><th>Status</th><th></th></tr></thead>
                 <tbody>
                 <tr th:each="item : ${items}">
                     <td th:text="${item.title}">Title</td>
                     <td th:text="${item.owner.fullName}">Owner</td>
                     <td th:text="${item.category.name}">Category</td>
+                    <td>
+                        <span class="approval-badge"
+                              th:classappend="${item.approvalStatus.name() == 'APPROVED'} ? ' approval-approved' : (${item.approvalStatus.name() == 'REJECTED'} ? ' approval-rejected' : ' approval-pending')"
+                              th:text="${item.approvalStatus.name() == 'PENDING'} ? 'Pending' : (${item.approvalStatus.name() == 'APPROVED'} ? 'Approved' : 'Rejected')">Pending</span>
+                    </td>
                     <td><span class="badge" th:classappend="${item.status.name() == 'AVAILABLE'} ? ' text-bg-success' : (${item.status.name() == 'BORROWED'} ? ' text-bg-warning' : ' text-bg-info')" th:text="${item.status}">Status</span></td>
                     <td class="text-end"><a class="btn btn-sm btn-outline-primary" th:href="@{/items/view/{id}(id=${item.id})}">Open</a></td>
                 </tr>

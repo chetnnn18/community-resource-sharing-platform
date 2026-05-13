@@ -14,9 +14,12 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -46,9 +49,19 @@ public class Item {
     @Column(length = 255)
     private String imageUrl;
 
+    @NotNull(message = "Price is required")
+    @DecimalMin(value = "0.00", message = "Price cannot be negative")
+    @Digits(integer = 8, fraction = 2, message = "Price must be a valid amount")
+    @Column(nullable = false, precision = 10, scale = 2, columnDefinition = "decimal(10,2) default 0.00")
+    private BigDecimal price = BigDecimal.ZERO;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private ItemStatus status = ItemStatus.AVAILABLE;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30, columnDefinition = "varchar(30) default 'APPROVED'")
+    private ResourceApprovalStatus approvalStatus = ResourceApprovalStatus.PENDING;
 
     @NotNull(message = "Category is required")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -67,6 +80,12 @@ public class Item {
 
     @PrePersist
     void onCreate() {
+        if (approvalStatus == null) {
+            approvalStatus = ResourceApprovalStatus.PENDING;
+        }
+        if (price == null) {
+            price = BigDecimal.ZERO;
+        }
         createdAt = LocalDateTime.now();
         updatedAt = createdAt;
     }
@@ -116,12 +135,28 @@ public class Item {
         this.imageUrl = imageUrl;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
     public ItemStatus getStatus() {
         return status;
     }
 
     public void setStatus(ItemStatus status) {
         this.status = status;
+    }
+
+    public ResourceApprovalStatus getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(ResourceApprovalStatus approvalStatus) {
+        this.approvalStatus = approvalStatus;
     }
 
     public Category getCategory() {

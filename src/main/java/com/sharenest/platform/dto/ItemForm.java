@@ -1,10 +1,14 @@
 package com.sharenest.platform.dto;
 
 import com.sharenest.platform.entity.ItemStatus;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.math.BigDecimal;
 
 public class ItemForm {
 
@@ -23,6 +27,11 @@ public class ItemForm {
     private String imageUrl;
 
     private MultipartFile imageFile;
+
+    @NotNull(message = "Price is required")
+    @DecimalMin(value = "0.00", message = "Price cannot be negative")
+    @Digits(integer = 8, fraction = 2, message = "Price must be a valid amount")
+    private BigDecimal price = BigDecimal.ZERO;
 
     @NotNull(message = "Category is required")
     private Long categoryId;
@@ -67,6 +76,14 @@ public class ItemForm {
 
     public void setImageFile(MultipartFile imageFile) {
         this.imageFile = imageFile;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public Long getCategoryId() {

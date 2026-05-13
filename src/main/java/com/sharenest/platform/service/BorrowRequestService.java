@@ -4,6 +4,7 @@ import com.sharenest.platform.entity.BorrowRequest;
 import com.sharenest.platform.entity.BorrowStatus;
 import com.sharenest.platform.entity.Item;
 import com.sharenest.platform.entity.ItemStatus;
+import com.sharenest.platform.entity.ResourceApprovalStatus;
 import com.sharenest.platform.entity.Role;
 import com.sharenest.platform.entity.User;
 import com.sharenest.platform.exception.AccessDeniedForResourceException;
@@ -30,6 +31,9 @@ public class BorrowRequestService {
         Item item = itemService.findById(itemId);
         if (item.getOwner().getId().equals(borrower.getId())) {
             throw new IllegalArgumentException("You cannot borrow your own item.");
+        }
+        if (item.getApprovalStatus() != ResourceApprovalStatus.APPROVED) {
+            throw new IllegalArgumentException("This item is waiting for admin approval.");
         }
         if (item.getStatus() != ItemStatus.AVAILABLE) {
             throw new IllegalArgumentException("This item is not available right now.");
